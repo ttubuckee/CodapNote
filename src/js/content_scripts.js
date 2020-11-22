@@ -138,13 +138,26 @@ function startTimer() {
 
 function init() {
     action_btn.innerHTML = "시작";
-    action_btn.onclick = startTimer;
+    action_btn.style.backgroundColor = '#0078FF';
+    action_btn.style.color = 'white';
+    action_btn.style.fontWeight = 'bold';
+    action_btn.style.padding = "5px";
     action_btn.style.marginLeft = "5px";
+    action_btn.style.border = "2px solid #0078FF";
+    action_btn.style.borderRadius = '3px'; // standard
+    action_btn.style.MozBorderRadius = '3px'; // Mozilla
+
+    action_btn.onclick = startTimer;
 
     input_h.setAttribute('placeholder', '시간');
     input_m.setAttribute('placeholder', '분');
     input_s.setAttribute('placeholder', '초');
-    input_arr.forEach(e => e.setAttribute('size', '4'));
+    input_arr.forEach(e => {
+        e.style.borderRadius = '3px';
+        e.style.MozBorderRadius = '3px';
+        e.setAttribute('size', '4');
+        e.style.padding = '5px';
+    });
 
     clock.setAttribute('display', 'none');
     clock.style.color = "white";
@@ -155,6 +168,8 @@ function init() {
     input_wrapper.style.display = "flex";
     input_wrapper.style.flexDirection = "row";
     input_wrapper.style.margin = "2px 5px 2px 5px";
+    input_wrapper.style.alignItems = "center";
+    // input_wrapper.style.justifyContent = "center";
 
     top_nav.appendChild(input_wrapper);
     timer.setInput(input_h, input_m, input_s);
