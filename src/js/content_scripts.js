@@ -110,12 +110,11 @@ function Timer() {
         this.clock.innerHTML = '';
     }
     this.checkValue = () => {
-        const result =  input_arr.reduce((acc,cur)=>acc && this.isNumber(cur));
-        console.log({result});
-        return result;
+        return input_arr.reduce((acc,cur)=>acc && this.isNumber(cur.value));
     }
     this.isNumber = (num) => {
-        return typeof parseInt(num) === 'number';
+        const regex = /^[0-9]+$/;
+        return regex.test(num);
     }
 }
 
