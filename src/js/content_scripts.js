@@ -105,6 +105,7 @@ function Timer() {
         this.input_h.value = '';
         this.input_m.value = '';
         this.input_s.value = '';
+        input_h.focus();
     }
     this.resetClock = () => {
         this.clock.innerHTML = '';
@@ -126,7 +127,6 @@ function startTimer() {
             action_btn.innerHTML = "시작";
         }
     } else { // 타이머가 실행중이 아닐 경우
-        action_btn.innerHTML = "중지";
         const h = input_h.value;
         const m = input_m.value;
         const s = input_s.value;
