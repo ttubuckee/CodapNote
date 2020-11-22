@@ -1,0 +1,11 @@
+{
+  "author": "daehyun-kim",
+  "manifest_version":2,
+  "name": "programmers_timer",
+  "version": "0.0.1",
+  "description":"timer for programmers user",
+  "content_scripts" : [{
+    "matches": ["https://programmers.co.kr/learn/courses/30/lessons/*"],
+    "js": ["./src/js/content_scripts.js"]
+  }]
+}
