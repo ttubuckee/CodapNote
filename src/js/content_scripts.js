@@ -5,10 +5,17 @@ const input_m = document.createElement("input");
 const input_s = document.createElement("input");
 const clock = document.createElement("div");
 const action_btn = document.createElement("button");
+const add_btn = document.createElement("button");
+add_btn.innerHTML = "추가";
+add_btn.addEventListener("click",()=>{
+    const url = window.location.href;
+    const title = document.querySelector('body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > ol > li.active').textContent;
+    addUnsolvedQuestions(title,url);
+});
 const timer = new Timer();
 
 const input_arr = [input_h, input_m, input_s];
-const elements = [...input_arr, clock, action_btn];
+const elements = [...input_arr, clock, action_btn,add_btn];
 
 init();
 
@@ -169,7 +176,6 @@ function init() {
     input_wrapper.style.flexDirection = "row";
     input_wrapper.style.margin = "2px 5px 2px 5px";
     input_wrapper.style.alignItems = "center";
-    // input_wrapper.style.justifyContent = "center";
 
     top_nav.appendChild(input_wrapper);
     timer.setInput(input_h, input_m, input_s);
@@ -177,3 +183,15 @@ function init() {
 
     window.onload = ()=>input_h.focus();
 }
+
+function addUnsolvedQuestions(key,value){
+    let item = {};  // 추가할 항목들
+    item[key] = value;
+    chrome.storage.sync.set(item, function() {
+        // 콜백
+        console.log({item});
+    });
+}
+
+
+
