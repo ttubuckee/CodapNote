@@ -6,9 +6,11 @@ const input_s = document.createElement("input");
 const clock = document.createElement("div");
 const action_btn = document.createElement("button");
 const star = document.createElement("img");
+
 star.style.width = "20px";
 star.style.height = "20px";
 star.style.marginRight = "10px";
+
 star.addEventListener("click", () => {
     const url = window.location.href;
     const title = document.querySelector('body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > ol > li.active').textContent;
@@ -50,7 +52,6 @@ function checkStar(check) {
 function isFavor() {
     const title = document.querySelector('body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > ol > li.active').textContent;
     chrome.storage.sync.get(null, function (items) {
-        console.log({items});
         const keys = Object.keys(items);
         keys.includes(title) ? checkStar(true) : checkStar(false);
     });
@@ -229,7 +230,7 @@ function addUnsolvedQuestions(key, value) {
         const keys = Object.keys(items);
         if (!keys.includes(key)) {
             chrome.storage.sync.set(item, function () {
-                console.log({item});
+
             });
         }
     });
