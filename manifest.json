@@ -1,9 +1,9 @@
 {
   "author": "daehyun-kim",
   "manifest_version":2,
-  "name": "프로그래머스 타이머",
+  "name": "코답노트 (프로그래머스 문제풀이 확장앱)",
   "version": "0.0.2",
-  "description":"timer for programmers user",
+  "description":"코답노트 - 프로그래머스 문제 풀이 타이머, 오답노트 기능 제공",
   "permissions": [
     "storage",
     "activeTab"
