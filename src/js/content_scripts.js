@@ -5,19 +5,63 @@ const input_m = document.createElement("input");
 const input_s = document.createElement("input");
 const clock = document.createElement("div");
 const action_btn = document.createElement("button");
-const add_btn = document.createElement("button");
-add_btn.innerHTML = "추가";
-add_btn.addEventListener("click",()=>{
+const star = document.createElement("img");
+star.style.width = "20px";
+star.style.height = "20px";
+star.style.marginRight = "10px";
+star.addEventListener("click", () => {
     const url = window.location.href;
     const title = document.querySelector('body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > ol > li.active').textContent;
-    addUnsolvedQuestions(title,url);
+
+    if (star.alt === "unstar") {
+        star.alt = "star";
+        star.src = chrome.extension.getURL("/src/img/Star.png?time=") + new Date().getTime();
+        addUnsolvedQuestions(title, url);
+    } else {
+        star.alt = "unstar";
+        star.src = chrome.extension.getURL("/src/img/unStar.png?time=") + new Date().getTime();
+        // remove from list
+        removeUnStaredQuestion(title);
+    }
 });
+
 const timer = new Timer();
 
 const input_arr = [input_h, input_m, input_s];
-const elements = [...input_arr, clock, action_btn,add_btn];
-
+const elements = [star, ...input_arr, clock, action_btn];
 init();
+
+function removeUnStaredQuestion(title){
+    chrome.storage.sync.remove(title);
+}
+function checkStar(check) {
+    if (check) {
+        // 별을 색칠
+        star.alt = "star";
+        star.src = chrome.extension.getURL("/src/img/Star.png?time=") + new Date().getTime();
+    } else {
+        // 별을 빈칸으로
+        star.alt = "unstar";
+        star.src = chrome.extension.getURL("/src/img/unStar.png?time=") + new Date().getTime();
+    }
+}
+
+function isFavor() {
+    const title = document.querySelector('body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > ol > li.active').textContent;
+    chrome.storage.sync.get(null, function (items) {
+        console.log({items});
+        const keys = Object.keys(items);
+        if (keys.includes(title)) checkStar(true);
+        else checkStar(false);
+        // for (let key of keys) {
+        //     if (key === title) {
+        //         checkStar(true);
+        //         return;
+        //     }
+        //     checkStar(false);
+        // }
+    });
+}
 
 function appendElementsToWrapper(elements) {
     for (let element of elements) {
@@ -118,7 +162,7 @@ function Timer() {
         this.clock.innerHTML = '';
     }
     this.checkValue = () => {
-        return input_arr.reduce((acc,cur)=>acc && this.isNumber(cur.value));
+        return input_arr.reduce((acc, cur) => acc && this.isNumber(cur.value));
     }
     this.isNumber = (num) => {
         const regex = /^[0-9]+$/;
@@ -181,15 +225,20 @@ function init() {
     timer.setInput(input_h, input_m, input_s);
     timer.setClock(clock);
 
-    window.onload = ()=>input_h.focus();
+    window.onload = () => input_h.focus();
+    isFavor();
 }
 
-function addUnsolvedQuestions(key,value){
+function addUnsolvedQuestions(key, value) {
     let item = {};  // 추가할 항목들
     item[key] = value;
-    chrome.storage.sync.set(item, function() {
-        // 콜백
-        console.log({item});
+    chrome.storage.sync.get(null, function (items) {
+        const keys = Object.keys(items);
+        if (!keys.includes(key)) {
+            chrome.storage.sync.set(item, function () {
+                console.log({item});
+            });
+        }
     });
 }
 

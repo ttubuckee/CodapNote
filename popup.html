@@ -17,8 +17,19 @@
             justify-content: center;
         }
 
-        #show-btn {
-            margin: 10px;
+        .btn-wrapper {
+            margin: 10px 10px 0px 10px;
+        }
+        .invisible-btn {
+            display: none;
+        }
+        button {
+            padding: 5px;
+            border : 2px solid #0078FF;
+            border-radius : 3px;
+            background-color: #0078FF;
+            color: white;
+            font-weight: bold;
         }
 
         ul {
@@ -45,7 +56,10 @@
 </head>
 <body>
 <div class="wrapper">
-    <button id="show-btn">확인</button>
+    <div class="btn-wrapper">
+        <button id="select-all-btn" class="invisible-btn" alt="체크">모두 선택</button>
+        <button id="delete-btn" class="invisible-btn">삭제</button>
+    </div>
     <ul id="ul-question-list">
     </ul>
 </div>
