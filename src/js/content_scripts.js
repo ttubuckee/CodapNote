@@ -31,9 +31,10 @@ const input_arr = [input_h, input_m, input_s];
 const elements = [star, ...input_arr, clock, action_btn];
 init();
 
-function removeUnStaredQuestion(title){
+function removeUnStaredQuestion(title) {
     chrome.storage.sync.remove(title);
 }
+
 function checkStar(check) {
     if (check) {
         // 별을 색칠
@@ -51,15 +52,7 @@ function isFavor() {
     chrome.storage.sync.get(null, function (items) {
         console.log({items});
         const keys = Object.keys(items);
-        if (keys.includes(title)) checkStar(true);
-        else checkStar(false);
-        // for (let key of keys) {
-        //     if (key === title) {
-        //         checkStar(true);
-        //         return;
-        //     }
-        //     checkStar(false);
-        // }
+        keys.includes(title) ? checkStar(true) : checkStar(false);
     });
 }
 
