@@ -9,20 +9,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function selectAll() {
     const btn = document.getElementById("select-all-btn");
+    const check_item = document.querySelectorAll('.check-item');
+
     if (btn.alt === "체크") {
         btn.innerHTML = "모두 선택";
         btn.alt = "!체크";
-        document.querySelectorAll('.check-item').forEach((e, k, p) => {
-            e.checked = false;
-        });
+        check_item.forEach(e => e.checked = false);
     } else {
         btn.innerHTML = "모두 해제";
         btn.alt = "체크";
-        document.querySelectorAll('.check-item').forEach((e, k, p) => {
-            e.checked = true;
-        });
+        check_item.forEach(e => e.checked = true);
     }
-
 }
 
 function deleteCheckedList() {
@@ -41,22 +38,24 @@ function deleteCheckedList() {
             }
         }
         deleteLi(ul_delete_list);
-        chrome.storage.sync.remove(delete_list,function(){
+        chrome.storage.sync.remove(delete_list, function () {
             alert('삭제되었습니다.');
         });
     } else {
         alert("취소 되었습니다.");
     }
 }
-function deleteLi(arr){
+
+function deleteLi(arr) {
     const ul = document.getElementById("ul-question-list");
     let li = document.getElementsByClassName("li-question");
 
-    for(let i=0;i<arr.length;++i){
-        if(arr.includes(li[i].getAttribute("value"))){
+    for (let i = 0; i < arr.length; ++i) {
+        if (arr.includes(li[i].getAttribute("value"))) {
             ul.removeChild(li[i]);
         }
     }
+    location.reload();
 }
 
 function getQuestions() {
@@ -71,7 +70,7 @@ function getQuestions() {
         if (ul_length === 0) {
             const keys = Object.keys(items);
             for (let key of keys) {
-                addRow(key, items[key],++idx);
+                addRow(key, items[key], ++idx);
             }
         }
     });
