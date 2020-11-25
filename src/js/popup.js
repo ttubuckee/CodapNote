@@ -33,7 +33,7 @@ function deleteCheckedList() {
 
         for (let i = 0; i < li_list.length; i++) { // remove 되면서 index가 하나씩 떨어졌고, 그래서 length가 3인 상황에서도 2개밖에 못 지웠던 것이다.
             if (li_list[i].firstChild.checked) {
-                delete_list.push(li_list[i].lastChild.textContent);
+                delete_list.push(li_list[i].lastChild.textContent.split('] ')[1]);
                 ul_delete_list.push(i);
             }
         }
@@ -89,7 +89,8 @@ function getQuestions() {
 
         a.setAttribute("href", url);
         a.setAttribute("target", "_blank");
-        a.innerHTML = title;
+        a.innerHTML = url.includes("programmers") ? `[프로그래머스] ${title}` : `[해커랭크] ${title}`;
+        // a.innerHTML = title;
 
         li.appendChild(a);
         ul.appendChild(li);

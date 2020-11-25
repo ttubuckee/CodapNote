@@ -16,6 +16,6 @@
   ],
   "content_scripts" : [{
     "matches": ["https://programmers.co.kr/learn/courses/30/lessons/*","https://www.hackerrank.com/challenges/*"],
-    "js": ["./src/js/content_scripts.js"]
+    "js": ["./src/js/content_scripts.js","./src/js/jquery-3.5.1.min.js"]
   }]
 }

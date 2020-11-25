@@ -199,7 +199,7 @@ function startTimer() {
     } else { // 타이머가 실행중이 아닐 경우
         const h = input_h.value === '' ? 0 : input_h.value;
         const m = input_m.value === '' ? 0 : input_m.value;
-        const s = input_s.value === '' ? 0 : input_h.value;
+        const s = input_s.value === '' ? 0 : input_s.value;
         timer.setBtn(action_btn);
         timer.setTime(h, m, s);
         timer.start();
