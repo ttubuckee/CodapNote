@@ -1,38 +1,59 @@
-const top_nav = document.querySelector("body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > div.navbar-collapse.collapse");
-const input_wrapper = document.createElement("div");
-const input_h = document.createElement("input");
-const input_m = document.createElement("input");
-const input_s = document.createElement("input");
-const clock = document.createElement("div");
-const action_btn = document.createElement("button");
-const star = document.createElement("img");
+let settings;
+let top_nav;
+let input_wrapper;
+let input_h;
+let input_m;
+let input_s;
+let clock;
+let action_btn;
+let star;
+let timer;
+let input_arr;
+let elements;
 
-clock.style.marginRight = "5px";
-star.style.width = "20px";
-star.style.height = "20px";
-star.style.marginRight = "10px";
-
-star.addEventListener("click", () => {
-    const url = window.location.href;
-    const title = document.querySelector('body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > ol > li.active').textContent;
-
-    if (star.alt === "unstar") {
-        star.alt = "star";
-        star.src = chrome.extension.getURL("/src/img/Star.png?time=") + new Date().getTime();
-        addUnsolvedQuestions(title, url);
-    } else {
-        star.alt = "unstar";
-        star.src = chrome.extension.getURL("/src/img/unStar.png?time=") + new Date().getTime();
-        // remove from list
-        removeUnStaredQuestion(title);
-    }
-});
-
-const timer = new Timer();
-
-const input_arr = [input_h, input_m, input_s];
-const elements = [star, ...input_arr, clock, action_btn];
 init();
+
+function getSelectorFromURL(cur_url) {
+    // const base_urls = [
+    //     {"https://programmers.co.kr/": "body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > div.navbar-collapse.collapse"},
+    //     {"https://www.hackerrank.com/": ".toolbar-left"}
+    // ];
+    // for (let url_obj of base_urls) {
+    //     const key = Object.keys(url_obj);
+    //     if (cur_url.includes(key[0])) {
+    //         cur_location = key[0];
+    //         return url_obj[key];
+    //     }
+    // }
+    const base_urls = [
+        {
+            "https://programmers.co.kr/": {
+                "clock_color": "white",
+                "url": "https://programmers.co.kr/",
+                "title_selector": "body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > ol > li.active",
+                "nav_selector": "body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > div.navbar-collapse.collapse"
+            }
+        },
+        {
+            "https://www.hackerrank.com/": {
+                "clock_color": "black",
+                "url": "https://www.hackerrank.com/",
+                "title_selector": "#content > div > div > div > header > div > div > div.community-header-breadcrumb-items > div > h1 > div > h1",
+                "nav_selector": ".toolbar-left"
+            }
+        }
+    ];
+
+    for (let setting_obj of base_urls) {
+        const urls = Object.keys(setting_obj);
+        for (let url of urls) {
+            if (cur_url.includes(url)) {
+                settings = setting_obj[url];
+                return setting_obj[url]['nav_selector'];
+            }
+        }
+    }
+}
 
 function removeUnStaredQuestion(title) {
     chrome.storage.sync.remove(title);
@@ -51,7 +72,7 @@ function checkStar(check) {
 }
 
 function isFavor() {
-    const title = document.querySelector('body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > ol > li.active').textContent;
+    const title = document.querySelector(settings["title_selector"]).textContent;
     chrome.storage.sync.get(null, function (items) {
         const keys = Object.keys(items);
         keys.includes(title) ? checkStar(true) : checkStar(false);
@@ -62,6 +83,9 @@ function appendElementsToWrapper(elements) {
     for (let element of elements) {
         input_wrapper.appendChild(element);
     }
+    top_nav.appendChild(input_wrapper);
+    timer.setInput(input_h, input_m, input_s);
+    timer.setClock(clock);
 }
 
 function Timer() {
@@ -182,7 +206,35 @@ function startTimer() {
     }
 }
 
-function init() {
+function createElements() {
+    top_nav = document.querySelector(getSelectorFromURL(location.href));
+    input_wrapper = document.createElement("div");
+    input_h = document.createElement("input");
+    input_m = document.createElement("input");
+    input_s = document.createElement("input");
+    clock = document.createElement("div");
+    action_btn = document.createElement("button");
+    star = document.createElement("img");
+}
+
+function setElementsStyle() {
+    //input_wrapper
+    input_wrapper.style.display = "flex";
+    input_wrapper.style.flexDirection = "row";
+    input_wrapper.style.margin = "2px 5px 2px 5px";
+    input_wrapper.style.alignItems = "center";
+
+    //clock
+    clock.style.marginRight = "5px";
+    clock.style.color = settings['clock_color'];//"white";
+    clock.style.fontWeight = "bold";
+
+    //star
+    star.style.width = "20px";
+    star.style.height = "20px";
+    star.style.marginRight = "10px";
+
+    //action_btn
     action_btn.innerHTML = "시작";
     action_btn.style.backgroundColor = '#0078FF';
     action_btn.style.color = 'white';
@@ -192,12 +244,42 @@ function init() {
     action_btn.style.border = "2px solid #0078FF";
     action_btn.style.borderRadius = '3px'; // standard
     action_btn.style.MozBorderRadius = '3px'; // Mozilla
+}
 
-    action_btn.onclick = startTimer;
-
+function setAttributes() {
     input_h.setAttribute('placeholder', '시간');
     input_m.setAttribute('placeholder', '분');
     input_s.setAttribute('placeholder', '초');
+
+    clock.setAttribute('display', 'none');
+}
+
+function init() {
+    createElements();
+    setElementsStyle();
+    setAttributes();
+
+    star.addEventListener("click", () => {
+        const url = window.location.href;
+        const title = document.querySelector(settings["title_selector"]).textContent;
+
+        if (star.alt === "unstar") {
+            star.alt = "star";
+            star.src = chrome.extension.getURL("/src/img/Star.png?time=") + new Date().getTime();
+            addUnsolvedQuestions(title, url);
+        } else {
+            star.alt = "unstar";
+            star.src = chrome.extension.getURL("/src/img/unStar.png?time=") + new Date().getTime();
+            // remove from list
+            removeUnStaredQuestion(title);
+        }
+    });
+
+    timer = new Timer();
+    input_arr = [input_h, input_m, input_s];
+    elements = [star, ...input_arr, clock, action_btn];
+
+    action_btn.onclick = startTimer;
 
     input_arr.forEach(e => {
         e.style.borderRadius = '3px';
@@ -206,23 +288,17 @@ function init() {
         e.style.padding = '5px';
     });
 
-    clock.setAttribute('display', 'none');
-    clock.style.color = "white";
-    clock.style.fontWeight = "bold";
-
-    appendElementsToWrapper(elements);
-
-    input_wrapper.style.display = "flex";
-    input_wrapper.style.flexDirection = "row";
-    input_wrapper.style.margin = "2px 5px 2px 5px";
-    input_wrapper.style.alignItems = "center";
-
-    top_nav.appendChild(input_wrapper);
-    timer.setInput(input_h, input_m, input_s);
-    timer.setClock(clock);
-
-    window.onload = () => input_h.focus();
-    isFavor();
+    const append_interval = setInterval(() => {
+        top_nav = document.querySelector(getSelectorFromURL(location.href));
+        if (top_nav) {
+            appendElementsToWrapper(elements);
+            input_h.focus();
+            clearInterval(append_interval);
+            isFavor();
+        } else {
+            console.log('시도중...');
+        }
+    }, 1000);
 }
 
 function addUnsolvedQuestions(key, value) {

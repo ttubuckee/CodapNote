@@ -15,7 +15,7 @@
     "/src/img/*.png"
   ],
   "content_scripts" : [{
-    "matches": ["https://programmers.co.kr/learn/courses/30/lessons/*","https://www.acmicpc.net/problem/*"],
+    "matches": ["https://programmers.co.kr/learn/courses/30/lessons/*","https://www.hackerrank.com/challenges/*"],
     "js": ["./src/js/content_scripts.js"]
   }]
 }
