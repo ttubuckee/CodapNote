@@ -7,6 +7,7 @@ const clock = document.createElement("div");
 const action_btn = document.createElement("button");
 const star = document.createElement("img");
 
+clock.style.marginRight = "5px";
 star.style.width = "20px";
 star.style.height = "20px";
 star.style.marginRight = "10px";
@@ -156,7 +157,7 @@ function Timer() {
         this.clock.innerHTML = '';
     }
     this.checkValue = () => {
-        return input_arr.reduce((acc, cur) => acc && this.isNumber(cur.value));
+        return input_arr.reduce((acc, cur) => acc && (this.isNumber(cur.value) || cur.value === ''));
     }
     this.isNumber = (num) => {
         const regex = /^[0-9]+$/;
@@ -172,9 +173,9 @@ function startTimer() {
             action_btn.innerHTML = "시작";
         }
     } else { // 타이머가 실행중이 아닐 경우
-        const h = input_h.value;
-        const m = input_m.value;
-        const s = input_s.value;
+        const h = input_h.value === '' ? 0 : input_h.value;
+        const m = input_m.value === '' ? 0 : input_m.value;
+        const s = input_s.value === '' ? 0 : input_h.value;
         timer.setBtn(action_btn);
         timer.setTime(h, m, s);
         timer.start();
@@ -197,6 +198,7 @@ function init() {
     input_h.setAttribute('placeholder', '시간');
     input_m.setAttribute('placeholder', '분');
     input_s.setAttribute('placeholder', '초');
+
     input_arr.forEach(e => {
         e.style.borderRadius = '3px';
         e.style.MozBorderRadius = '3px';

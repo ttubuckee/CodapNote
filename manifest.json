@@ -5,8 +5,7 @@
   "version": "0.0.2",
   "description":"코답노트 - 프로그래머스 문제 풀이 타이머, 오답노트 기능 제공",
   "permissions": [
-    "storage",
-    "activeTab"
+    "storage"
   ],
   "browser_action" : {
     "default_popup" : "./popup.html",
@@ -16,7 +15,7 @@
     "/src/img/*.png"
   ],
   "content_scripts" : [{
-    "matches": ["https://programmers.co.kr/learn/courses/30/lessons/*"],
+    "matches": ["https://programmers.co.kr/learn/courses/30/lessons/*","https://www.acmicpc.net/problem/*"],
     "js": ["./src/js/content_scripts.js"]
   }]
 }
