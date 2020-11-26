@@ -1,3 +1,4 @@
+import swal from 'sweetalert';
 let settings;
 let top_nav;
 let input_wrapper;
@@ -149,7 +150,7 @@ function Timer() {
     this.start = () => {
         if (!this.checkValue()) {
             this.resetInput();
-            alert('정상적인 값을 입력해주세요!');
+            swal('정상적인 값을 입력해주세요!');
         } else {
             this.btn.innerHTML = "중지";
             this.isStart = true;
@@ -180,8 +181,10 @@ function Timer() {
     this.resetClock = () => {
         this.clock.innerHTML = '';
     }
-    this.checkValue = () => {
-        return input_arr.reduce((acc, cur) => acc && (this.isNumber(cur.value) || cur.value === ''));
+    this.checkValue = () => { // map으로 value 변환해서 주지않으면 reduce에서 acc 값이 input의 원본값으로 들어가버린다.
+        return input_arr
+            .map(e=>e.value)
+            .reduce((acc,cur)=>acc && (this.isNumber(cur.value) || cur.value === ''));
     }
     this.isNumber = (num) => {
         const regex = /^[0-9]+$/;
