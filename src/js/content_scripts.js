@@ -1,4 +1,5 @@
 import swal from 'sweetalert';
+
 let settings;
 let top_nav;
 let input_wrapper;
@@ -189,8 +190,8 @@ function Timer() {
         // map으로 value 변환해서 주지않으면 reduce에서 acc 값이 input의 원본값으로 들어가버린다.
         // <input placeholder="시간" size="4" style="border-radius: 3px; padding: 5px;"> 이런 꼴로 들어가게되고, 이녀석의 value는 '' 이므로 로직상 true가 된다.
         return input_arr
-            .map(e=>e.value)
-            .reduce((acc,cur)=>acc && (this.isNumber(cur) || cur === ''));
+            .map(e => e.value)
+            .reduce((acc, cur) => acc && (this.isNumber(cur) || cur === ''));
     }
     this.isNumber = (num) => {
         const regex = /^[0-9]+$/;
@@ -200,13 +201,18 @@ function Timer() {
 
 function startTimer() {
     if (timer.isStart) { // 타이머가 실행중일 경우
-        const result = swal("타이머가 실행중입니다. 초기화 하시겠습니까?", {
-            buttons: ["아니요!","물론이죠"],
+        swal({
+            title: "타이머가 실행중입니다.\n초기화 하시겠습니까?",
+            text: "'예' 를 누르시면 타이머가 초기화 됩니다.",
+            icon: "warning",
+            buttons: ["아니오","예"],
+            dangerMode: true
+        }).then((willDelete) => {
+            if (willDelete) {
+                timer.stop();
+                action_btn.innerHTML = "시작";
+            }
         });
-        if (result) {
-            timer.stop();
-            action_btn.innerHTML = "시작";
-        }
     } else { // 타이머가 실행중이 아닐 경우
         const h = input_h.value === '' ? 0 : input_h.value;
         const m = input_m.value === '' ? 0 : input_m.value;
