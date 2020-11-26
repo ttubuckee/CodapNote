@@ -156,6 +156,7 @@ function Timer() {
                 title: "종료!",
                 text: "고생하셨습니다",
                 icon: "success",
+                buttons: "확인"
             });
         } else {
             this.RemainDate -= 1000;
@@ -210,9 +211,6 @@ function Timer() {
 
 function startTimer() {
     if (timer.isStart) { // 타이머가 실행중일 경우
-        // const result = swal("타이머가 실행중입니다. 초기화 하시겠습니까?", {
-        //     buttons: ["아니요!", "물론이죠"],
-        // });
         sweetalert__WEBPACK_IMPORTED_MODULE_0___default()({
             title: "타이머가 실행중입니다.\n초기화 하시겠습니까?",
             text: "'예' 를 누르시면 타이머가 초기화 됩니다.",
@@ -225,10 +223,6 @@ function startTimer() {
                 action_btn.innerHTML = "시작";
             }
         });
-        // if (result) {
-        //     timer.stop();
-        //     action_btn.innerHTML = "시작";
-        // }
     } else { // 타이머가 실행중이 아닐 경우
         const h = input_h.value === '' ? 0 : input_h.value;
         const m = input_m.value === '' ? 0 : input_m.value;

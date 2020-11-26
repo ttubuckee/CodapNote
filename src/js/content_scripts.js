@@ -147,6 +147,7 @@ function Timer() {
                 title: "종료!",
                 text: "고생하셨습니다",
                 icon: "success",
+                buttons: "확인"
             });
         } else {
             this.RemainDate -= 1000;
