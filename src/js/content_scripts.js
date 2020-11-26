@@ -142,7 +142,11 @@ function Timer() {
 
         if (this.RemainDate < 0) {
             this.stop();
-            alert("종료");
+            swal({
+                title: "종료!",
+                text: "고생하셨습니다",
+                icon: "success",
+            });
         } else {
             this.RemainDate -= 1000;
         }
@@ -181,10 +185,12 @@ function Timer() {
     this.resetClock = () => {
         this.clock.innerHTML = '';
     }
-    this.checkValue = () => { // map으로 value 변환해서 주지않으면 reduce에서 acc 값이 input의 원본값으로 들어가버린다.
+    this.checkValue = () => {
+        // map으로 value 변환해서 주지않으면 reduce에서 acc 값이 input의 원본값으로 들어가버린다.
+        // <input placeholder="시간" size="4" style="border-radius: 3px; padding: 5px;"> 이런 꼴로 들어가게되고, 이녀석의 value는 '' 이므로 로직상 true가 된다.
         return input_arr
             .map(e=>e.value)
-            .reduce((acc,cur)=>acc && (this.isNumber(cur.value) || cur.value === ''));
+            .reduce((acc,cur)=>acc && (this.isNumber(cur) || cur === ''));
     }
     this.isNumber = (num) => {
         const regex = /^[0-9]+$/;
@@ -194,7 +200,9 @@ function Timer() {
 
 function startTimer() {
     if (timer.isStart) { // 타이머가 실행중일 경우
-        const result = confirm("타이머가 실행중입니다. 초기화 하시겠습니까?");
+        const result = swal("타이머가 실행중입니다. 초기화 하시겠습니까?", {
+            buttons: ["아니요!","물론이죠"],
+        });
         if (result) {
             timer.stop();
             action_btn.innerHTML = "시작";
