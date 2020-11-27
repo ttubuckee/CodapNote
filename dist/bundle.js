@@ -10,6 +10,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let settings;
+let goto_url;
 let top_nav;
 let input_wrapper;
 let input_h;
@@ -23,7 +24,20 @@ let input_arr;
 let elements;
 
 init();
-
+function requestPermission (){
+    if (window.Notification) {
+        Notification.requestPermission();
+    }
+}
+function notify() {
+    const notification = new Notification('시간 종료 알림', {
+        icon: chrome.extension.getURL("/src/img/timer_icon.png"),
+        body: '정해진 시간이 되어 알람이 종료되었습니다.',
+    });
+    // notification.onclick = function () {
+    //     window.open(goto_url);
+    // };
+}
 function getSelectorFromURL(cur_url) {
     // const base_urls = [
     //     {"https://programmers.co.kr/": "body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > div.navbar-collapse.collapse"},
@@ -151,13 +165,40 @@ function Timer() {
         this.clock.innerHTML = hours + " : " + minutes + " : " + seconds;
 
         if (this.RemainDate < 0) {
+            // sendMessageToBackGround();
+            notify();
             this.stop();
-            sweetalert__WEBPACK_IMPORTED_MODULE_0___default()({
-                title: "종료!",
-                text: "고생하셨습니다",
-                icon: "success",
-                buttons: "확인"
-            });
+            if(Notification.permission === 'granted'){
+                sweetalert__WEBPACK_IMPORTED_MODULE_0___default()({
+                    title: "종료!",
+                    text: "고생하셨습니다",
+                    icon: "success",
+                    buttons: "확인"
+                });
+            }else{
+                const span = document.createElement("span");
+                span.innerHTML = "고생하셨습니다<br>(현재 사이트에서 알림 설정이 차단되어<br>푸시 알림이 가지않습니다.<br>푸시 알림을 허용해주세요.)",
+                // swal({
+                //     title: "종료!",
+                //     content: span,
+                //     //text: "고생하셨습니다<br/>(알림 설정이 차단되어 푸시 알림이 가지않습니다.<br/>푸시 알림을 허용해주세요.)",
+                //     icon: "success",
+                //     buttons: "확인"
+                // });
+                sweetalert__WEBPACK_IMPORTED_MODULE_0___default()({
+                    title: "종료",
+                    content: span,
+                    icon: "success",
+                    buttons: ["푸시 알림 설정", "확인"]
+                })
+                    .then((confirm) => {
+                        if (confirm) {
+
+                        }else {
+                            requestPermission();
+                        }
+                    });
+            }
         } else {
             this.RemainDate -= 1000;
         }
@@ -167,6 +208,7 @@ function Timer() {
             this.resetInput();
             sweetalert__WEBPACK_IMPORTED_MODULE_0___default()('정상적인 값을 입력해주세요!');
         } else {
+            goto_url = location.href;
             this.btn.innerHTML = "중지";
             this.isStart = true;
             this.interval = setInterval(this.updateClock, 1000);
@@ -197,11 +239,7 @@ function Timer() {
         this.clock.innerHTML = '';
     }
     this.checkValue = () => {
-        // map으로 value 변환해서 주지않으면 reduce에서 acc 값이 input의 원본값으로 들어가버린다.
-        // <input placeholder="시간" size="4" style="border-radius: 3px; padding: 5px;"> 이런 꼴로 들어가게되고, 이녀석의 value는 '' 이므로 로직상 true가 된다.
-        return input_arr
-            .map(e => e.value)
-            .reduce((acc, cur) => acc && (this.isNumber(cur) || cur === ''));
+        return input_arr.reduce((acc, cur) => acc && (this.isNumber(cur.value) || cur.value === ""),this.isNumber(input_arr[0].value));
     }
     this.isNumber = (num) => {
         const regex = /^[0-9]+$/;
@@ -224,9 +262,9 @@ function startTimer() {
             }
         });
     } else { // 타이머가 실행중이 아닐 경우
-        const h = input_h.value === '' ? 0 : input_h.value;
-        const m = input_m.value === '' ? 0 : input_m.value;
-        const s = input_s.value === '' ? 0 : input_s.value;
+        const h = input_h.value = input_h.value === '' ? 0 : input_h.value;
+        const m = input_m.value = input_m.value === '' ? 0 : input_m.value;
+        const s = input_s.vaule = input_s.value === '' ? 0 : input_s.value;
         timer.setBtn(action_btn);
         timer.setTime(h, m, s);
         timer.start();
@@ -279,6 +317,8 @@ function setAttributes() {
     input_s.setAttribute('placeholder', '초');
 
     clock.setAttribute('display', 'none');
+
+    action_btn.setAttribute('id','action-btn');
 }
 
 function init() {
@@ -326,6 +366,7 @@ function init() {
             console.log('시도중...');
         }
     }, 1000);
+    requestPermission();
 }
 
 function addUnsolvedQuestions(key, value) {

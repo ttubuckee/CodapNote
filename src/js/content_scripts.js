@@ -1,6 +1,7 @@
 import swal from 'sweetalert';
 
 let settings;
+let goto_url;
 let top_nav;
 let input_wrapper;
 let input_h;
@@ -14,39 +15,23 @@ let input_arr;
 let elements;
 
 init();
-// sendMessageToBackGround();
-function checkNoti() {
-    document.getElementById("noti-btn").addEventListener('click',calculate);
-    // if (window.Notification) {
-    //     Notification.requestPermission();
-    // }
-}
 
-function calculate() {
-    setTimeout(function () {
-        notify();
-    }, 5000);
+function requestPermission() {
+    if (window.Notification) {
+        Notification.requestPermission();
+    }
 }
 
 function notify() {
-    if (Notification.permission !== 'granted') {
-        alert('notification is disabled');
-    }
-    else {
-        var notification = new Notification('Notification title', {
-            icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
-            body: 'Notification text',
-        });
-        notification.onclick = function () {
-            window.open('http://google.com');
-        };
-    }
-}
-function sendMessageToBackGround(){
-    chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
-        console.log(response.farewell);
+    const notification = new Notification('시간 종료 알림', {
+        icon: chrome.extension.getURL("/src/img/timer_icon.png"),
+        body: '정해진 시간이 되어 알람이 종료되었습니다.',
     });
+    // notification.onclick = function () {
+    //     window.open(goto_url);
+    // };
 }
+
 function getSelectorFromURL(cur_url) {
     // const base_urls = [
     //     {"https://programmers.co.kr/": "body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > div.navbar-collapse.collapse"},
@@ -174,13 +159,39 @@ function Timer() {
         this.clock.innerHTML = hours + " : " + minutes + " : " + seconds;
 
         if (this.RemainDate < 0) {
+            // sendMessageToBackGround();
+            notify();
             this.stop();
-            swal({
-                title: "종료!",
-                text: "고생하셨습니다",
-                icon: "success",
-                buttons: "확인"
-            });
+            if (Notification.permission === 'granted') {
+                swal({
+                    title: "종료!",
+                    text: "고생하셨습니다",
+                    icon: "success",
+                    buttons: "확인"
+                });
+            } else {
+                const span = document.createElement("span");
+                span.innerHTML = "고생하셨습니다<br>(현재 사이트에서 알림 설정이 차단되어<br>푸시 알림이 가지않습니다.<br>푸시 알림을 허용해주세요.)",
+                    // swal({
+                    //     title: "종료!",
+                    //     content: span,
+                    //     //text: "고생하셨습니다<br/>(알림 설정이 차단되어 푸시 알림이 가지않습니다.<br/>푸시 알림을 허용해주세요.)",
+                    //     icon: "success",
+                    //     buttons: "확인"
+                    // });
+                swal({
+                    title: "종료",
+                    content: span,
+                    icon: "success",
+                    buttons: ["푸시 알림 설정", "확인"]
+                }).then((confirm) => {
+                    if (confirm) {
+
+                    } else {
+                        requestPermission();
+                    }
+                });
+            }
         } else {
             this.RemainDate -= 1000;
         }
@@ -190,7 +201,7 @@ function Timer() {
             this.resetInput();
             swal('정상적인 값을 입력해주세요!');
         } else {
-            // calculate();
+            goto_url = location.href;
             this.btn.innerHTML = "중지";
             this.isStart = true;
             this.interval = setInterval(this.updateClock, 1000);
@@ -221,7 +232,7 @@ function Timer() {
         this.clock.innerHTML = '';
     }
     this.checkValue = () => {
-        return input_arr.reduce((acc, cur) => acc && (this.isNumber(cur.value) || cur.value === ""),this.isNumber(input_arr[0].value));
+        return input_arr.reduce((acc, cur) => acc && (this.isNumber(cur.value) || cur.value === ""), this.isNumber(input_arr[0].value));
     }
     this.isNumber = (num) => {
         const regex = /^[0-9]+$/;
@@ -235,7 +246,7 @@ function startTimer() {
             title: "타이머가 실행중입니다.\n초기화 하시겠습니까?",
             text: "'예' 를 누르시면 타이머가 초기화 됩니다.",
             icon: "warning",
-            buttons: ["아니오","예"],
+            buttons: ["아니오", "예"],
             dangerMode: true
         }).then((willDelete) => {
             if (willDelete) {
@@ -299,6 +310,8 @@ function setAttributes() {
     input_s.setAttribute('placeholder', '초');
 
     clock.setAttribute('display', 'none');
+
+    action_btn.setAttribute('id', 'action-btn');
 }
 
 function init() {
@@ -346,6 +359,7 @@ function init() {
             console.log('시도중...');
         }
     }, 1000);
+    requestPermission();
 }
 
 function addUnsolvedQuestions(key, value) {

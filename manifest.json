@@ -5,7 +5,9 @@
   "version": "0.0.3",
   "description":"코답노트 - 프로그래머스/해커랭크 문제 풀이 타이머, 오답노트 기능 제공",
   "permissions": [
-    "storage"
+    "storage",
+    "notifications",
+    "tabs"
   ],
   "browser_action" : {
     "default_popup" : "./popup.html",
