@@ -14,7 +14,39 @@ let input_arr;
 let elements;
 
 init();
+// sendMessageToBackGround();
+function checkNoti() {
+    document.getElementById("noti-btn").addEventListener('click',calculate);
+    // if (window.Notification) {
+    //     Notification.requestPermission();
+    // }
+}
 
+function calculate() {
+    setTimeout(function () {
+        notify();
+    }, 5000);
+}
+
+function notify() {
+    if (Notification.permission !== 'granted') {
+        alert('notification is disabled');
+    }
+    else {
+        var notification = new Notification('Notification title', {
+            icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+            body: 'Notification text',
+        });
+        notification.onclick = function () {
+            window.open('http://google.com');
+        };
+    }
+}
+function sendMessageToBackGround(){
+    chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
+        console.log(response.farewell);
+    });
+}
 function getSelectorFromURL(cur_url) {
     // const base_urls = [
     //     {"https://programmers.co.kr/": "body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > div.navbar-collapse.collapse"},
@@ -158,6 +190,7 @@ function Timer() {
             this.resetInput();
             swal('정상적인 값을 입력해주세요!');
         } else {
+            // calculate();
             this.btn.innerHTML = "중지";
             this.isStart = true;
             this.interval = setInterval(this.updateClock, 1000);
@@ -188,11 +221,7 @@ function Timer() {
         this.clock.innerHTML = '';
     }
     this.checkValue = () => {
-        // map으로 value 변환해서 주지않으면 reduce에서 acc 값이 input의 원본값으로 들어가버린다.
-        // <input placeholder="시간" size="4" style="border-radius: 3px; padding: 5px;"> 이런 꼴로 들어가게되고, 이녀석의 value는 '' 이므로 로직상 true가 된다.
-        return input_arr
-            .map(e => e.value)
-            .reduce((acc, cur) => acc && (this.isNumber(cur) || cur === ''));
+        return input_arr.reduce((acc, cur) => acc && (this.isNumber(cur.value) || cur.value === ""),this.isNumber(input_arr[0].value));
     }
     this.isNumber = (num) => {
         const regex = /^[0-9]+$/;
@@ -215,9 +244,9 @@ function startTimer() {
             }
         });
     } else { // 타이머가 실행중이 아닐 경우
-        const h = input_h.value === '' ? 0 : input_h.value;
-        const m = input_m.value === '' ? 0 : input_m.value;
-        const s = input_s.value === '' ? 0 : input_s.value;
+        const h = input_h.value = input_h.value === '' ? 0 : input_h.value;
+        const m = input_m.value = input_m.value === '' ? 0 : input_m.value;
+        const s = input_s.vaule = input_s.value === '' ? 0 : input_s.value;
         timer.setBtn(action_btn);
         timer.setTime(h, m, s);
         timer.start();
