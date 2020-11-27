@@ -1,3 +1,4 @@
+const base_urls = {"https://programmers.co.kr/":"프로그래머스","https://www.hackerrank.com/":"해커랭크","https://www.acmicpc.net/":"백준"};
 document.addEventListener("DOMContentLoaded", function () {
     const delete_btn = document.getElementById("delete-btn");
     const select_btn = document.getElementById("select-all-btn");
@@ -89,7 +90,15 @@ function getQuestions() {
 
         a.setAttribute("href", url);
         a.setAttribute("target", "_blank");
-        a.innerHTML = url.includes("programmers") ? `[프로그래머스] ${title}` : `[해커랭크] ${title}`;
+
+        const keys = Object.keys(base_urls);
+        for( let key of keys){
+            if(url.includes(key)) {
+                a.innerHTML = `[${base_urls[key]}] ${title}`;
+                break;
+            }
+        }
+        // a.innerHTML = url.includes("programmers") ? `[프로그래머스] ${title}` : `[해커랭크] ${title}`;
         // a.innerHTML = title;
 
         li.appendChild(a);

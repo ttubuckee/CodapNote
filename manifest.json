@@ -2,12 +2,11 @@
   "author": "daehyun-kim",
   "manifest_version":2,
   "name": "코답노트 (프로그래머스/해커랭크 문제풀이 확장앱)",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description":"코답노트 - 프로그래머스/해커랭크 문제 풀이 타이머, 오답노트 기능 제공",
   "permissions": [
     "storage",
-    "notifications",
-    "tabs"
+    "notifications"
   ],
   "browser_action" : {
     "default_popup" : "./popup.html",
@@ -17,7 +16,7 @@
     "/src/img/*.png"
   ],
   "content_scripts" : [{
-    "matches": ["https://programmers.co.kr/learn/courses/30/lessons/*","https://www.hackerrank.com/challenges/*"],
+    "matches": ["https://programmers.co.kr/learn/courses/30/lessons/*","https://www.hackerrank.com/challenges/*","https://www.acmicpc.net/problem/*"],
     "js": ["./dist/bundle.js","./src/js/jquery-3.5.1.min.js"]
   }]
 }

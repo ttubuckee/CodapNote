@@ -60,6 +60,14 @@ function getSelectorFromURL(cur_url) {
                 "title_selector": "#content > div > div > div > header > div > div > div.community-header-breadcrumb-items > div > h1 > div > h1",
                 "nav_selector": ".toolbar-left"
             }
+        },
+        {
+            "https://www.acmicpc.net/": {
+                "clock_color": "black",
+                "url": "https://www.acmicpc.net/",
+                "title_selector": "#problem_title",
+                "nav_selector": ".page-header"
+            }
         }
     ];
 

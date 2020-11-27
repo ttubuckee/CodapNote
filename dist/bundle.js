@@ -24,11 +24,13 @@ let input_arr;
 let elements;
 
 init();
-function requestPermission (){
+
+function requestPermission() {
     if (window.Notification) {
         Notification.requestPermission();
     }
 }
+
 function notify() {
     const notification = new Notification('시간 종료 알림', {
         icon: chrome.extension.getURL("/src/img/timer_icon.png"),
@@ -38,6 +40,7 @@ function notify() {
     //     window.open(goto_url);
     // };
 }
+
 function getSelectorFromURL(cur_url) {
     // const base_urls = [
     //     {"https://programmers.co.kr/": "body > div.navbar.navbar-dark.navbar-expand-lg.navbar-application.navbar-breadcrumb > div.navbar-collapse.collapse"},
@@ -65,6 +68,14 @@ function getSelectorFromURL(cur_url) {
                 "url": "https://www.hackerrank.com/",
                 "title_selector": "#content > div > div > div > header > div > div > div.community-header-breadcrumb-items > div > h1 > div > h1",
                 "nav_selector": ".toolbar-left"
+            }
+        },
+        {
+            "https://www.acmicpc.net/": {
+                "clock_color": "black",
+                "url": "https://www.acmicpc.net/",
+                "title_selector": "#problem_title",
+                "nav_selector": ".page-header"
             }
         }
     ];
@@ -168,36 +179,35 @@ function Timer() {
             // sendMessageToBackGround();
             notify();
             this.stop();
-            if(Notification.permission === 'granted'){
+            if (Notification.permission === 'granted') {
                 sweetalert__WEBPACK_IMPORTED_MODULE_0___default()({
                     title: "종료!",
                     text: "고생하셨습니다",
                     icon: "success",
                     buttons: "확인"
                 });
-            }else{
+            } else {
                 const span = document.createElement("span");
                 span.innerHTML = "고생하셨습니다<br>(현재 사이트에서 알림 설정이 차단되어<br>푸시 알림이 가지않습니다.<br>푸시 알림을 허용해주세요.)",
-                // swal({
-                //     title: "종료!",
-                //     content: span,
-                //     //text: "고생하셨습니다<br/>(알림 설정이 차단되어 푸시 알림이 가지않습니다.<br/>푸시 알림을 허용해주세요.)",
-                //     icon: "success",
-                //     buttons: "확인"
-                // });
+                    // swal({
+                    //     title: "종료!",
+                    //     content: span,
+                    //     //text: "고생하셨습니다<br/>(알림 설정이 차단되어 푸시 알림이 가지않습니다.<br/>푸시 알림을 허용해주세요.)",
+                    //     icon: "success",
+                    //     buttons: "확인"
+                    // });
                 sweetalert__WEBPACK_IMPORTED_MODULE_0___default()({
                     title: "종료",
                     content: span,
                     icon: "success",
                     buttons: ["푸시 알림 설정", "확인"]
-                })
-                    .then((confirm) => {
-                        if (confirm) {
+                }).then((confirm) => {
+                    if (confirm) {
 
-                        }else {
-                            requestPermission();
-                        }
-                    });
+                    } else {
+                        requestPermission();
+                    }
+                });
             }
         } else {
             this.RemainDate -= 1000;
@@ -239,7 +249,7 @@ function Timer() {
         this.clock.innerHTML = '';
     }
     this.checkValue = () => {
-        return input_arr.reduce((acc, cur) => acc && (this.isNumber(cur.value) || cur.value === ""),this.isNumber(input_arr[0].value));
+        return input_arr.reduce((acc, cur) => acc && (this.isNumber(cur.value) || cur.value === ""), this.isNumber(input_arr[0].value));
     }
     this.isNumber = (num) => {
         const regex = /^[0-9]+$/;
@@ -253,7 +263,7 @@ function startTimer() {
             title: "타이머가 실행중입니다.\n초기화 하시겠습니까?",
             text: "'예' 를 누르시면 타이머가 초기화 됩니다.",
             icon: "warning",
-            buttons: ["아니오","예"],
+            buttons: ["아니오", "예"],
             dangerMode: true
         }).then((willDelete) => {
             if (willDelete) {
@@ -318,7 +328,7 @@ function setAttributes() {
 
     clock.setAttribute('display', 'none');
 
-    action_btn.setAttribute('id','action-btn');
+    action_btn.setAttribute('id', 'action-btn');
 }
 
 function init() {
