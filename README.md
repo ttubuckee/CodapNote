@@ -1,18 +1,10 @@
-<h1 align="center">Welcome to CodapNote 👋</h1>
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <a href="https://github.com/ttubuckee/CodapNote#readme" target="_blank">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
-  </a>
-  <a href="https://github.com/ttubuckee/CodapNote/graphs/commit-activity" target="_blank">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
-  </a>
-  <a href="https://github.com/ttubuckee/CodapNote/blob/master/LICENSE" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/ttubuckee/CodapNote" />
-  </a>
-</p>
+<h1 align="center">Welcome to CodapNote 👋</h1>    
 
-> chrome extension for coding test preperations&#34;
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)    <a href="https://github.com/ttubuckee/CodapNote#readme" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>    <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
+
+> chrome extension for coding test preperations&#34;    
 
 ### 🏠 [Homepage](https://github.com/ttubuckee/CodapNote#readme)
 
