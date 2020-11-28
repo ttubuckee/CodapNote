@@ -1,9 +1,9 @@
 {
   "author": "daehyun-kim",
   "manifest_version":2,
-  "name": "코답노트 (프로그래머스/해커랭크 문제풀이 확장앱)",
+  "name": "코답노트 (프로그래머스/백준/해커랭크 문제풀이 확장앱)",
   "version": "0.0.4",
-  "description":"코답노트 - 프로그래머스/해커랭크 문제 풀이 타이머, 오답노트 기능 제공",
+  "description":"코답노트 - 프로그래머스/백준/해커랭크 문제 풀이 타이머, 오답노트 기능 제공",
   "permissions": [
     "storage",
     "notifications"

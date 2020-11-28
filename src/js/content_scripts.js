@@ -356,17 +356,18 @@ function init() {
         e.style.padding = '5px';
     });
 
-    const append_interval = setInterval(() => {
+    const mutation = new MutationObserver(()=>{
         top_nav = document.querySelector(getSelectorFromURL(location.href));
         if (top_nav) {
             appendElementsToWrapper(elements);
             input_h.focus();
-            clearInterval(append_interval);
             isFavor();
+            mutation.disconnect();
         } else {
             console.log('시도중...');
         }
-    }, 1000);
+    });
+    mutation.observe(document.querySelector('.hr-monaco-editor-wrapper'),{childList:true});
     requestPermission();
 }
 
