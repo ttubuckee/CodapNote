@@ -1,5 +1,5 @@
 {
-  "name": "programmers_timer",
+  "name": "CodapNote",
   "version": "1.0.0",
   "description": "chrome extension for coding test preperations\"",
   "main": "webpack.config.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ttubuckee/programmers_timer.git"
+    "url": "git+https://github.com/ttubuckee/CodapNote.git"
   },
   "author": "daehyun-kim",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ttubuckee/programmers_timer/issues"
+    "url": "https://github.com/ttubuckee/CodapNote/issues"
   },
-  "homepage": "https://github.com/ttubuckee/programmers_timer#readme",
+  "homepage": "https://github.com/ttubuckee/CodapNote#readme",
   "dependencies": {
     "babel-loader": "^8.2.1",
     "sweetalert": "^2.1.2",
