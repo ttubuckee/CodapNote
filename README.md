@@ -12,7 +12,7 @@
   </a>
 </p>
 
-> chrome extension for coding test preperations&#34;
+> chrome extension for coding test preparations&#34;
 
 ### 🏠 [Homepage](https://github.com/ttubuckee/CodapNote#readme)
 
