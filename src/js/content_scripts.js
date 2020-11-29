@@ -356,18 +356,26 @@ function init() {
         e.style.padding = '5px';
     });
 
-    const mutation = new MutationObserver(()=>{
+    if(settings["url"] === "https://www.hackerrank.com/"){
+        const mutation = new MutationObserver(()=>{
+            top_nav = document.querySelector(getSelectorFromURL(location.href));
+            if (top_nav) {
+                appendElementsToWrapper(elements);
+                input_h.focus();
+                isFavor();
+                mutation.disconnect();
+            } else {
+                console.log('시도중...');
+            }
+        });
+        mutation.observe(document.querySelector('.hr-monaco-editor-wrapper'),{childList:true});
+    }else {
         top_nav = document.querySelector(getSelectorFromURL(location.href));
-        if (top_nav) {
-            appendElementsToWrapper(elements);
-            input_h.focus();
-            isFavor();
-            mutation.disconnect();
-        } else {
-            console.log('시도중...');
-        }
-    });
-    mutation.observe(document.querySelector('.hr-monaco-editor-wrapper'),{childList:true});
+        appendElementsToWrapper(elements);
+        input_h.focus();
+        isFavor();
+    }
+
     requestPermission();
 }
 
